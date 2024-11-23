@@ -1,12 +1,17 @@
-FROM python:3.8-slim-buster
+# Use the official Python image
+FROM python:3.10-slim
 
-RUN apt update && apt upgrade -y
-RUN apt install git -y
-COPY requirements.txt /requirements.txt
+# Set the working directory in the container
+WORKDIR /app
 
-RUN cd /
-RUN pip3 install -U pip && pip3 install -U -r requirements.txt
-RUN mkdir /fwdbot
-WORKDIR /fwdbot
-COPY start.sh /start.sh
-CMD ["/bin/bash", "/start.sh"] 
+# Copy the current directory contents into the container
+COPY . .
+
+# Install any dependencies
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Expose the port your app runs on (if applicable)
+EXPOSE 8000
+
+# Set the default command to run the application
+CMD ["python", "main.py"]
